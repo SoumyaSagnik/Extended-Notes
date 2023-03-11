@@ -597,6 +597,7 @@ router.get("/", (req, res) => {
   res.send("User list");
 });
 
+// users/new here is the new.ejs inside users folder as shown in image above
 router.get("/new", (req, res) => {
   res.render("users/new", { firstName: "Test" });
 });
