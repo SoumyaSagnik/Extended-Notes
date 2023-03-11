@@ -11,7 +11,7 @@
 - npm i ejs &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // ejs view engine install
 
 <p>
-    Next create a devStart inside package.json under scripts (replace test). The value would be nodemon server.js. Here server.js will be out server file. Create that next.
+    Next create a devStart inside package.json under scripts (replace test). The value would be nodemon server.js. Here server.js will be our server file. Create that next.
 </p>
 
 ```javascript
