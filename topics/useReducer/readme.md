@@ -1,6 +1,6 @@
 # useReducer
 
-useReducer allows us to mnage state and re-render a component whenever that state changes. The idea behind useReducer is that it gives you a more concrete way to handle complex state.
+useReducer allows us to manage state and re-render a component whenever that state changes. The idea behind useReducer is that it gives you a more concrete way to handle complex state.
 
 The `useReducer()` takes in two parameetrs to start with. The first one is the reducer which is a function that we perform on our state to get new state and it's also gonna have an initial value (the second one).
 
