@@ -59,9 +59,9 @@ app.get("/", (req, res) => {
 Hi // client
 ```
 
-- The first parameter is the path. The second parameter is a function that takes in 3 parameters. The first is a requset, second a response and third is the next function. Most of the time we don't care about the next function and not using it here.
+- The first parameter is the path. The second parameter is a function that takes in 3 parameters. The first is a requset, second a response and third is the next function. Most of the time we don't care about the next function and we're not using it here.
 
-- In the above code we creted a route at index '/' and whenever someone makes a get request to that route, we send 'Hi' to the client.
+- In the above code we created a route at index '/' and whenever someone makes a get request to that route, we send 'Hi' to the client.
 
 - For the most part we generally don't use send().
 
