@@ -180,6 +180,8 @@ export default Profile;
 
 We're using `state.user.value` since in features/user.js because we've set initialState to be as shown below.
 
+`Note: user here represents the reducer named used in main.jsx`
+
 ```javascript
 // /features/user.js
 
