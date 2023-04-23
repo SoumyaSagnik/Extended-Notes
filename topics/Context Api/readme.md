@@ -1,6 +1,6 @@
 # Context Api
 
-First we need to inport { createContext } from react.
+First we need to import { createContext } from react.
 
 We then have to create a context for every group of components that you would like to be accessible throughout the application.
 
