@@ -9,3 +9,5 @@
 <a href="./topics/Redux/readme.md">Redux</a>
 
 <a href="./topics/Context Api/readme.md">Context Api</a>
+
+<a href="./topics/JavaScript Strings/readme.md">JavaScript Strings</a>
