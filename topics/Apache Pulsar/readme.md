@@ -48,6 +48,8 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 
 - `Real-Time Processing`: Apache Pulsar supports real-time processing of data streams through its built-in features like Pulsar Functions and Pulsar IO connectors. Pulsar Functions allow developers to write lightweight compute tasks that can be executed directly within the messaging infrastructure, enabling real-time transformations, aggregations, and filtering of data streams. Pulsar IO connectors provide seamless integration with external systems, allowing data to be ingested from and exported to various data sources and sinks.
 
+<p align="center"><img src="./images/unified.jpg" /></p>
+
 ---
 
 **Messaging in Apache Pulsar**
@@ -140,7 +142,9 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 
 - `Topics`: In Pulsar, messages are published to topics. Topics act as named channels or categories that messages are organized into. Producers publish messages to specific topics, and consumers subscribe to those topics to receive messages. Topics can be thought of as logical queues or channels that hold messages until they're consumed.
 
-- `Publish Subscribe Model`: Pulsar follows a publish-subscribe model, where messages published to a topic are delivered to all subscribed consumers. This model allows for one-to-many message distribution, where multiple consumers can receive and process the same message independently.
+- `Publish Subscribe Model`: Pulsar follows a publish-subscribe model, where messages published to a topic are delivered to all subscribed consumers. This model allows for one-to-many message distribution, where multiple consumers can receive and process the same message independently. The publisher sends data and doesn't know about the subscribers or their status. All interactions go through Pulsar, and it handles all communication. Subscriber receives data from publisher and never directly interacts with it. `In Pulsar, a publisher is called a producer and a subscriber is called a consumer`.
+
+<p align="center"><img src="./images/pub-sub.jpg" /></p>
 
 - `Ordering`: Pulsar guarantees message ordering within a topic partition. Messages published to a topic partition are delivered to consumers in the same order they were published.
 
@@ -166,6 +170,16 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 
 - `Multi Tenancy and Security`: Pulsar orovides multi-tenancy support, allowing different organizations or users to share the same Pulsar cluster while maintaining data isolation and access control. Pulsar also offers security features like authentication, authorization, encryption, and data governance to ensure data privacy and compliance.
 
+**Like with messaging, the Pulsar broker manages the messages for you and sends the stream of data to the applications. Unlike messaging, streaming applications control when the data is delivered. In a messaging system, applications do not have control over when a message arrives.**
+
+_Streaming use cases incldue_:
+
+- Moving large amounts of data to another service (logs to real-time ETL). ETL - Extract, Load, Transfer.
+
+- Running periodic jobs to move large amounts of data and aggregating the data to move traditional stores (logs to S3).
+
+- Computing near real-time aggregate of a message stream (real-time analytics over page views).
+
 ---
 
 **Message Partitioning**
@@ -183,3 +197,17 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 - `Dynamic Partition`: Pulsar supports dynamic partitioning, allowing the number of partitions for a topic to be increased or decreased as needed. This enables scaling the message processing capacity by adding more partitions and distributing the workload across a larger number of consumers.
 
 - `Load Balancing`: Pulsar ensures load balancing across partitions and consumers. When multiple consumers are subscribed to a partitioned topic, Pulsar automatically balances the message distribution across consumers by assigning partitions to consumers in a balanced manner. This ensures that the workload is evenly distributed and that each consumer has a similar number of partitions to process.
+
+---
+
+**Application + Data Services**
+
+<p>Pulsar brings the application and data domains together in four steps:</p>
+
+- Pulsar consumes the raw data from all the services over a unified transport.
+
+- Pulsar either offloads the data to long-term storage or uses a real-tiem stream processor to extract, transform, and load (ETL) the data.
+
+- Pulsar reads back the data using a parallel batch process.
+
+- Pulsar sends the stream of data back to the other systems so the services can consume the data.
