@@ -234,12 +234,52 @@ _Streaming use cases incldue_:
 
 Four subscription modes are available in Plusar:
 
-- `Exclusive`: these subscriptions allow only a single consumer to be connected at a time. That consumer is guaranteeing order. Only one consumer within a subscription group receives messages from a topic. The broker sends messages to the active consumer, ensuring that no other consumers in the same group receive the same message. The exclusive consumer is guaranteed to receive messages in the order they were published to the topic. This mode is suitable when a single consumer needs to process all messages exclusively.
+- `Exclusive`: these subscriptions allow only a single consumer to be connected at a time. That consumer is `guaranteeing order`. Only one consumer within a subscription group receives messages from a topic. The broker sends messages to the active consumer, ensuring that no other consumers in the same group receive the same message. The exclusive consumer is guaranteed to receive messages in the order they were published to the topic. This mode is suitable when a single consumer needs to process all messages exclusively.
 
 - `Failover`: these subscriptions are similar to exclusive, but if a consumer fails a second one can pick up where the first one left off. This ensures that messages are not lost and processing continues uninterrupted. Failover is typically used for scenarios where hihg availability and fault tolerance are critical.
 
-- `Shared`: these subscriptions consume a subset of the messages. There is no ordering guarantee but it allows for distributed work. Shared subscription mode allows multiple consumers within a subscription group to recieve and process messages from a topic simultaneously. In this mode, messages are distributed among active consumers using a round-robin approach. Each consumer in the group receives a fair share of messages, ensuring load balancing and parallel processing of messages.
+- `Shared`: these subscriptions consume a subset of the messages. There is `no ordering guarantee` but it allows for distributed work. Shared subscription mode allows multiple consumers within a subscription group to recieve and process messages from a topic simultaneously. In this mode, messages are distributed among active consumers using a round-robin approach. Each consumer in the group receives a fair share of messages, ensuring load balancing and parallel processing of messages.
 
 - `Key-shared`: these subscriptions allow multiple consumers to attach and each of these consumers have guaranteed ordering using a key. It allows consumers to specify a subset of message keys that they are interested in. Each key is associated with a specific consumer within the subscription group. Messages with the same key are always delivered to the same consumer. This mode is useful when maintaining the order of processing for specific keys is important.
+
+---
+
+**Multi Layered Architecture**
+
+<p>Pulsar provides a turn-key architecture. You don't have to build complex tooling outside your cluster to make it work the way you want. The majority of everything you need to do is built into the system directly. In this way, Pulsar lowers complexity because it is able to take care of a lot of things for you.</p>
+
+<p>Pulsar's multi-layered architecture separates the message storage layer from the message serving layer. This decoupling of the storage and serving layers, provides flexibility that allows Pulsar to map to a broad set of use cases and to dynamically scale without any downtime.</p>
+
+The three layers of Pulsar architecture, from top to bottom, are:
+
+- `API Layer (serving layer)`: Data serving is handled by brokers.
+
+- `Compute layer (physical disk, RAM, CPU)`
+
+- `Storage layer (message retention)`: The data storage is handled by `bookies`.
+
+<p align="center"><img src="./images/architecture.jpg" /></p>
+
+---
+
+**Broker**
+
+In Apache Pulsar, a broker is a core component of the Pulsar `messaging` system that handles the `ingestion`, `storage`, and `distribution` of messages within a Pulsar cluster. Brokers play a central role in facilitating the communication between producers and consumers and ensuring the reliable delivery of messages. Key functions and responsibilities of broker is discussed below:
+
+- `Ingestion and Storage`: Brokers receive messages from producers and persist them to durable storage for later consumption. They handle the incoming messages and ensure their reliable strage.
+
+- `Topic Management`: Brokers manage the creation, configuration, and lifecycle of topics within the cluster. They handle topic discovery and provide metadata about topics to producers and consumers.
+
+- `Message Routing`: Brokers are responsible for routing messages to the appropriate consumers based on the topic subscriptions. They maintain the mapping between topics and their corresponding subscriptions and ensure that messages are delivered to the right consumers.
+
+- `Message Distribution`: Brokers distribute messages across multiple partitions within a topic. They ensure that messages are evenly distributed and load-balanced among the available partitions to achieve high throughput and scalability.
+
+- `Consumer Management`: Brokers coordinate the registration, load balancing, and coordination of consumers within the cluster. They keep track of active consumers, their subscriptions, and the progress of consumed messages.
+
+- `Message Acknowledgment`: Brokers handle message acknowledgments from consumers, ensuring reliable message delivery. When a consumer successfully processes a message, it sends an acknowledgment to the broker, allowing the broker to remove the message from its internal buffers and mark it as delivered.
+
+- `Fault Tolerance and Replication`: Brokers support fault tolerance and high availability through data replication. They replicate data across multiple brokers to ensure that messages are still available for consumption even if a broker fails.
+
+- `Cluster Coordination`: Brokers participate in cluster coordination activities, such as leader election and synchronization, through the use of `Apache ZooKeeper`. They collaborate with other brokers and components in the cluster to maintain consistency and stability.
 
 ---
