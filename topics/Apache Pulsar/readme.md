@@ -38,7 +38,7 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 
 - `Message Queueing`: Message queueing systems focus on reliable and ordered message delivery. They provide features such as guaranteed message persistance, message acknowledgment, and support for different messaging patterns like point-to-point communication and publish-subscribe messaging. Message queues ensure that messages are delivered to consumers in a reliable and orderly manner, preserving message order and supporting message durability.
 
-- `Data Streaming`: Data streaming systems emphasize the continuous and real-time processing of large volumes of data streams. They are designed to handle high-throughput data ingestion, processing, and analysis. Streaming systems typically provide features like event time handling, windowing, and processing guarantees such as exactly onec semantics. They enable the processing of data streams in a scalable and fault-tolerant manner, often leveraging distributed computing frameworks like Apache Flink or Apache Spark.
+- `Data Streaming`: Data streaming systems emphasize the continuous and real-time processing of large volumes of data streams. They are designed to handle high-throughput data ingestion, processing, and analysis. Streaming systems typically provide features like event time handling, windowing, and processing guarantees such as exactly one semantics. They enable the processing of data streams in a scalable and fault-tolerant manner, often leveraging distributed computing frameworks like Apache Flink or Apache Spark.
 
 <p>Apache Pulsar combines the best of both worlds by providing a unified architecture that supports both message queuing and data streaming within a single system. Here's how Apache Pulsar achieves this:</p>
 
@@ -81,6 +81,8 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 - `Routing to Dead Letter Topic`: Once a message is considered failed, Pulsar automatically routes it to the configured dead letter topic. The message is no longer available for consumption from the original topic and is instead sent to the dead letter topic for further analysis and troubleshooting.
 
 - `Manual Intervention`: Messages in the dead letter topic can be inspected, analyzed, and processed manually to understand the reason for the failure and take appropriate actions. This might involve identifying and fixing the underlying issue, retrying the failed messages, or performing any necessary data cleansing or transformation.
+
+**Pulsar also supports advanced messaging patterns like scheduled delivery.**
 
 ---
 
@@ -131,3 +133,53 @@ Pulsar offers a publish-subscribe messaging model where **producers publish mess
 - `Efficient Resource Utilization`: Pulsar optimizes resource utilization by employing techniques such as message batching, compression, and efficient networking protocols. By batching messages together, Pulsar reduces the overhead of individual message processing and improves overall throughput. Compression techniques reduce the storage and network bandwidth requirements, allowing for efficient data storage and transmission. Pulsar also leverages high-performance networking protocols to minimize latency and maximize throughput.
 
 ---
+
+**Message Queuing**
+
+<p>Message Queuing in Apache Pulsar refers to the capability of the system to store and deliver messages in a reliable and ordered manner. Pulsar provides a high-performance message queuing mechanism that allows producers to publish messages in a sequential and reliable fashion.</p>
+
+- `Topics`: In Pulsar, messages are published to topics. Topics act as named channels or categories that messages are organized into. Producers publish messages to specific topics, and consumers subscribe to those topics to receive messages. Topics can be thought of as logical queues or channels that hold messages until they're consumed.
+
+- `Publish Subscribe Model`: Pulsar follows a publish-subscribe model, where messages published to a topic are delivered to all subscribed consumers. This model allows for one-to-many message distribution, where multiple consumers can receive and process the same message independently.
+
+- `Ordering`: Pulsar guarantees message ordering within a topic partition. Messages published to a topic partition are delivered to consumers in the same order they were published.
+
+- `Message Durability`: Messages published to Pulsar are stored durably in a distributed log storage system, typically Apache BookKeeper. This ensures that messages are presisted and protected against data loss. Even in the event of failures or system restarts, Pulsar can recover and deliver messages reliably from the durable storage.
+
+- `Consumer Groups`: Pulsar supports consumer groups, allowing multiple consumers to form a group and collectively consume messages from a topic. Each consumer in a group processes a subset of the messages, enabling parallel message processing. Pulsar ensures that each ensures that each message is delivered to only one consumer within a consumer group, allowing for load balancing and scalability.
+
+- `Acknowledgement`: Pulsar employs an acknowledgement mechanism to track the consumption status of messages. When a consumer successfully processes a message, it sends an acknowledgement (ack) back to the Pulsar broker. The broker uses acknowledgements to determine the progress of message consumption and to track the delivery status of messages. If a consumer fails to acknowledge a messagewithin a specified time, Pulsar assumes that the message delivery was unsuccessful and attempts to redeliver the message to another consumer.
+
+---
+
+**Data Streaming**
+
+<p>Data streaming in Apache Pulsar refers to the continuous and real-time processing of data from various sources. Pulsar provides a powerful and scalable platform for streaming data ingestion, processing, and consumption. Here's an overview of how data streaming works in Pulsar.</p>
+
+- `Publish Subscribe Model`
+
+- `Streaming Data Sources`: Pulsar can handle streaming data from various sources, such as IoT devices, log files, sensors, social media feeds, application events, and more. These data sources continuously generate data in real-time, and Pulsar provides the infrastructure to ingest and process this data as it arrives.
+
+- `Real Time Data Ingestion`: Pulsar supports high throughput and low-latency data ingestion. Producers can publish data to Pulsar topics at a high rate, and Pulsar effectively handles the storage and distribution of data. Pulsar's architecture, with the separation of compute and storage layers, allows for elastic scaling to handle increasing data volumes and ingestion rates.
+
+- `Stream Processing`: Pulsar integrates with stream processing frameworks, such as Apache Flink and Apache Spark, to enable real-time data processing on the ingested data. These frameworks can be connected to Pulsar as consumers, allowing them to process the data stream in parallel and perform various operations like filtering, transforming, aggregating and enriching the data in real-time.
+
+- `Multi Tenancy and Security`: Pulsar orovides multi-tenancy support, allowing different organizations or users to share the same Pulsar cluster while maintaining data isolation and access control. Pulsar also offers security features like authentication, authorization, encryption, and data governance to ensure data privacy and compliance.
+
+---
+
+**Message Partitioning**
+
+<p>Message partiotioning in Apache Pulsar is a mechanism used to distribute messages across multiple partitions within a topic. It enables parallel processing and scalability by allowing different messages to be processed independently and in parallel by different consumers. Here's an explanation of how message partitioning works in Pulsar.</p>
+
+- `Partitioned Topics`: In Pulsar, a topic can be partitioned into multiple logical segments called partitions. Each partition is an ordered sequence of messages, and messages published to a topic are evenly distributed among these partitions based on a partitioning scheme.
+
+- `Partitioning Scheme`: Pulsar provides flexible options for partitioning messages. The partitioning scheme can be determined based on various factors, such as message key, round-robin distribution, or a custom partitioning function defined by the user. The chosen scheme determines how messages are mapped to partitions.
+
+- `Message Routing`: When a producer publishes a message to a partitioned topic, Pulsar uses the partitioning scheme to determine the target partition for the message. The scheme takes into account the message's key or applies the defined distribution logic to determine which partition the message should be sent to. This ensures that messages with the same key are always routed to the same partition, maintaining message order for messages with the same key.
+
+- `Independent Processing`: Each partition within a topic is independent and can be processed by different consumers concurrently. Consumers within a consumer group are typically responsible for processing different partitions. By distributing partitions across multiple consumers, Pulsar enables parallel message processing, improving overall throughput and scalability.
+
+- `Dynamic Partition`: Pulsar supports dynamic partitioning, allowing the number of partitions for a topic to be increased or decreased as needed. This enables scaling the message processing capacity by adding more partitions and distributing the workload across a larger number of consumers.
+
+- `Load Balancing`: Pulsar ensures load balancing across partitions and consumers. When multiple consumers are subscribed to a partitioned topic, Pulsar automatically balances the message distribution across consumers by assigning partitions to consumers in a balanced manner. This ensures that the workload is evenly distributed and that each consumer has a similar number of partitions to process.
