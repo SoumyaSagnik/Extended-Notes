@@ -211,3 +211,35 @@ _Streaming use cases incldue_:
 - Pulsar reads back the data using a parallel batch process.
 
 - Pulsar sends the stream of data back to the other systems so the services can consume the data.
+
+---
+
+**Some key terms in Apache Pulsar**
+
+- `Producer`: process that publishes messages to a topic.
+
+- `Consumer`: process that establishes a subscription to a topic and processes messages published to that topic.
+
+- `Subscription`: It is the binding between a topic and a consumer. Subscription is a named configuration that determines how messages are delivered to consumers. Four subscription modes are available in Pulsar: exclusive, shared, failover, and key-shared.
+
+- `Brokers`: they handle the connections and routes messages.
+
+- `Topics`: named channels for transmitting messages from producers to consumers. Partitioned topics are virtual topics composed of multiple topics.
+
+- `Messages`: they belong to a topic and contain an arbitrary payload.
+
+---
+
+**Subscription Modes in Apache Pulsar**
+
+Four subscription modes are available in Plusar:
+
+- `Exclusive`: these subscriptions allow only a single consumer to be connected at a time. That consumer is guaranteeing order. Only one consumer within a subscription group receives messages from a topic. The broker sends messages to the active consumer, ensuring that no other consumers in the same group receive the same message. The exclusive consumer is guaranteed to receive messages in the order they were published to the topic. This mode is suitable when a single consumer needs to process all messages exclusively.
+
+- `Failover`: these subscriptions are similar to exclusive, but if a consumer fails a second one can pick up where the first one left off. This ensures that messages are not lost and processing continues uninterrupted. Failover is typically used for scenarios where hihg availability and fault tolerance are critical.
+
+- `Shared`: these subscriptions consume a subset of the messages. There is no ordering guarantee but it allows for distributed work. Shared subscription mode allows multiple consumers within a subscription group to recieve and process messages from a topic simultaneously. In this mode, messages are distributed among active consumers using a round-robin approach. Each consumer in the group receives a fair share of messages, ensuring load balancing and parallel processing of messages.
+
+- `Key-shared`: these subscriptions allow multiple consumers to attach and each of these consumers have guaranteed ordering using a key. It allows consumers to specify a subset of message keys that they are interested in. Each key is associated with a specific consumer within the subscription group. Messages with the same key are always delivered to the same consumer. This mode is useful when maintaining the order of processing for specific keys is important.
+
+---
