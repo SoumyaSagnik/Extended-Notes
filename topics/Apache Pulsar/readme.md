@@ -283,3 +283,19 @@ In Apache Pulsar, a broker is a core component of the Pulsar `messaging` system 
 - `Cluster Coordination`: Brokers participate in cluster coordination activities, such as leader election and synchronization, through the use of `Apache ZooKeeper`. They collaborate with other brokers and components in the cluster to maintain consistency and stability.
 
 ---
+
+**Pulsar Logical Components**
+
+The hierarchical structure of a Pulsar cluster includes:
+
+- `Instance`: An instance in Pulsar refers to a single deployment of Pulsar broker. It represents an individual process or node that runs the Pulsar broker software.
+
+- `Cluster`: A Pulsar cluster consists of multiple instances (brokers) that work together as a single logical unit. Clusters enable horizontal scalability and fault tolerance by distributing the workload across multiple instances. Each instance in the cluster is aware of the other instances and participates in message storage, replication and message routing.
+
+- `Tenants`: Tenants provide a logical isolation and resource management within a Pulsar cluster. A tenant represents an independent entity that has its own set of namespaces and topics. Tenants are used to segregate resources, access control policies, and usage quotas across different users sharing the same Pulsar cluster. Each tenant operates independently, and its resources are managed separately.
+
+- `Namespaces`: Namespaces are logical containers that group related topics and provide isolation within a Pulsar cluster. They are owned by a specific `tenant` and serve as a unit of organization and access control. Namespaces allow different users or applications within a tenant to have separate message streams and configuration settings. They act as a namespace boundry for topics, ensuring that topics with the same name can exist independently across different namespaces.
+
+- `Topics`: Topics are named channels to which messages are published and from which messages are consumed. They represent communication channels in Pulsar. Producers publish messages to topics, and consumers subscribe to topics to receive those messages. Topics can be further organized within namespaces to reflect the logical structure of the data or messaging patterns. Topics can also be partitioned to enable parallel processing and scalability across multiple instances within the cluster.
+
+---
