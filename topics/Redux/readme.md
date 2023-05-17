@@ -111,7 +111,7 @@ Inside the createSlice we're going to pass all the information about the reducer
 
 ---
 
-`useSelector` hook is used to capture the state stored in the redux store and. The state value can then be displayed in a particular component.
+`useSelector` hook is used to capture the state stored in the redux store. The state value can then be displayed in a particular component.
 
 ```javascript
 // main.jsx
