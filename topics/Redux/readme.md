@@ -1,4 +1,4 @@
-# Redux
+# Redux (toolkit)
 
 Redux is a javascript state management library.
 
