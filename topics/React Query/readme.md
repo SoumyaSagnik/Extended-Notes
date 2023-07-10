@@ -18,7 +18,7 @@ two important things in useQuery: **queryKey** and **queryFn**.
 
 queryKey is a key that **uniquely** identifies the query. It always takes an array.
 
-queryFn is the thing that's going to **run** to query our data. It always accepts a promise.
+queryFn is the thing that's going to **run** to query our data. It always expects to return a promise.
 
 In case of failures, react-query does multiple retries, before displaying the error message.
 
@@ -49,6 +49,71 @@ const App = () => {
         <li key={post?.id}>{post?.title}</li>
       ))}
     </ul>
+  );
+};
+
+export default App;
+```
+
+---
+
+### useMutation
+
+useMutation also takes an object and you've to take care of only one thing here: mutationFn.
+
+mutationFn returns a promise, just like useQueryFn.
+
+useMutation just changes the underlying data. We need to show the updated data again after successful mutation.
+
+for this we invalidate the query. React query will refetch the query that has been invalidated. For invaliating, we use the **useQueryClient** hook.
+
+```javascript
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+const Posts = [
+  { id: 1, title: "Post 1" },
+  { id: 2, title: "Post 2" },
+];
+
+const App = () => {
+  const queryClient = useQueryClient();
+  const postQuery = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => wait(1000).then(() => [...Posts]),
+  });
+
+  const newPostMutation = useMutation({
+    mutationFn: (title) => {
+      return wait(1000).then(() =>
+        Posts.push({ id: crypto.randomUUID, title })
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+    },
+  });
+
+  if (postQuery.isLoading) return <p>Loading...</p>;
+  if (postQuery.isError) return <pre>{JSON.stringify(postQuery.error)}</pre>;
+
+  function wait(duration) {
+    return new Promise((resolve) => setTimeout(resolve, duration));
+  }
+
+  return (
+    <>
+      <ul>
+        {postQuery?.data.map((post) => (
+          <li key={post?.id}>{post?.title}</li>
+        ))}
+      </ul>
+      <button
+        disabled={newPostMutation.isLoading}
+        onClick={() => newPostMutation.mutate("New Post")}
+      >
+        Add Post
+      </button>
+    </>
   );
 };
 
